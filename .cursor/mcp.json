@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "local-expert": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${workspaceFolder}/index.js"]
+    }
+  }
+}
