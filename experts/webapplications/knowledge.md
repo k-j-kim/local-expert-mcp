@@ -3,9 +3,28 @@ topic: customTab
 description: Knowledge for creating and adding features to webapplications
 ---
 
-# Adding a new feature to webapps
+# 0. Adding a new feature to webapps
 
 When the user asks to add a feature to their app, follow this workflow.
+
+
+When adding a feature, integrating code from an npm package, or bringing in a reference implementation:
+
+1. **Prefer copying over rewriting.** Use `cp` (or equivalent) to copy files from the source (e.g. `node_modules/<package>/dist/...` or a reference app) into this project. Do not retype or rewrite the same code by hand.
+
+2. **Then adjust.** After copying, do minimal edits: fix import paths (e.g. change relative `../../` imports to the project’s path alias like `@/`), update any app-specific config, and remove or adapt anything that doesn’t apply.
+
+3. **When to copy.** Copy when:
+   - Installing a feature from a template/feature package (e.g. authentication, search, charts).
+   - The package ships full source in `dist/` or `src/` that is meant to be integrated.
+   - You would otherwise be recreating multiple files by reading a reference and typing them out.
+
+4. **When rewriting is okay.** Only rewrite or create from scratch when:
+   - The source is not file-based (e.g. only docs or snippets).
+   - The integration is a thin wrapper or a single small file.
+   - Copying would pull in a large, unrelated tree and the actual need is a small part of it.
+
+
 
 ## 1. Match the request to a feature
 
