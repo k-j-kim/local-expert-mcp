@@ -10,11 +10,23 @@ experts/
 │   └── knowledge.md
 ├── customTab/
 │   └── knowledge.md
+├── webapplications/           # directory index — call with topic "webapplications" first
+│   └── knowledge.md
+├── webapplications-feature-adding-features/
+│   └── knowledge.md
+├── webapplications-best-practice/
+│   └── knowledge.md
+├── webapplications-feature-analytics-chart/
+│   └── knowledge.md
+├── webapplications-feature-global-search/
+│   └── knowledge.md
+└── ... (other webapplications-* sub-experts)
 ```
 
-- Any folder under `experts/` is an “expert” (e.g. `customApplication`, `customTab`).
+- Any folder under `experts/` is an “expert” (e.g. `customApplication`, `customTab`, `webapplications`, `webapplications-best-practice`).
 - All `.md` files under those folders are loaded and served.
 - Each file can define what the knowledge is for via a **header** (used for topic filtering).
+- For **webapplications**, the `webapplications/` folder holds a directory; other `webapplications-*` folders hold sub-knowledges. Call with topic `webapplications` first, then with the chosen sub-topic name for chained lookups.
 
 ## Knowledge file headers
 
@@ -44,9 +56,11 @@ If there is no frontmatter, the first `# Heading` line is used as the topic.
 - **Tool: `get_expert_knowledge`**  
   - **Arguments:** `topic` (optional string).  
   - **Behavior:**  
-    - If `topic` is provided: returns only knowledge whose topic/expert/description matches (case-insensitive).  
+    - If `topic` exactly matches an expert folder name (e.g. `webapplications`), returns only that expert’s files (for directory-style experts).  
+    - Otherwise, if `topic` is provided: returns knowledge whose topic/expert/description matches (case-insensitive).  
     - If omitted: returns all loaded expert knowledge.  
-  Use this to pull in only the expert that matches the user’s question (e.g. “customApplication”, “customTab”).
+  Use this to pull in only the expert that matches the user’s question (e.g. “customApplication”, “customTab”).  
+  **Chained calls (webapplications):** Call first with topic `webapplications` to get a directory of sub-knowledges; then call again with a sub-topic (e.g. `webapplications-best-practice`, `webapplications-feature-analytics-chart`, `webapplications-feature-global-search`) to load the relevant knowledge.
 
 ## Launch and call
 

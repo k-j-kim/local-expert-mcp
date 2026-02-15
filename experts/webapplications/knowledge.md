@@ -1,55 +1,29 @@
 ---
-topic: customTab
-description: Knowledge for creating and adding features to webapplications
+topic: webapplications
+description: Directory of webapplications sub-knowledges — call get_expert_knowledge with one of the sub-topic names below to load that knowledge.
 ---
 
-# 0. Adding a new feature to webapps
+# Web Applications — Directory
 
-When the user asks to add a feature to their app, follow this workflow.
+This is the **directory** of sub-knowledges for web applications (Salesforce React BYO, feature packages, copy-then-adjust workflow). **Call `get_expert_knowledge` again with one of the topic names below** to load the relevant knowledge.
 
+## Sub-knowledges (use as `topic` in get_expert_knowledge)
 
-When adding a feature, integrating code from an npm package, or bringing in a reference implementation:
+| Topic name | Use when |
+|------------|---------|
+| **webapplications-feature-adding-features** | Adding a feature to a webapp, installing a feature package, copy-then-adjust workflow, feature table and npm install steps |
+| **webapplications-best-practice** | Building or extending the React BYO app: routes, path aliases, Tailwind/shadcn, folder structure, components, build/test, verification checklist |
+| **webapplications-feature-analytics-chart** | Analytics charts, Recharts, AnalyticsChart, ChartContainer |
+| **webapplications-feature-global-search** | Global search, searching Salesforce objects with filters and pagination; REST keyword search, q 2–999 chars |
+| **webapplications-feature-authentication** | Login, register, password reset, protected routes, auth |
+| **webapplications-feature-nav-menu** | App layout, responsive navigation menu |
+| **webapplications-feature-graphql** | GraphQL data access, executeGraphQL, codegen, AccountsTable; object detail (list search can use REST) |
+| **webapplications-feature-shadcn** | Shared UI (shadcn): Button, Card, Input, Select, Table, Tabs, etc. |
+| **webapplications-adding-map** | Adding a map: Leaflet, geocoding, markers, usePropertyMapMarkers, useGeocode |
+| **webapplications-creating-records** | Creating Salesforce records: createRecord, custom/standard objects, id handling, Application__c, Lead |
+| **webapplications-weather-widget** | Real weather widget: Open-Meteo (free, no key), useWeather hook, dashboard card, WMO codes |
+| **webapplications-list-and-create-records** | List + create any custom object: GraphQL list, createRecord, hook with refetch, form picklists match object |
 
-1. **Prefer copying over rewriting.** Use `cp` (or equivalent) to copy files from the source (e.g. `node_modules/<package>/dist/...` or a reference app) into this project. Do not retype or rewrite the same code by hand.
+**Flow:** After reading this directory, call `get_expert_knowledge({ topic: "<sub-topic-name>" })` with the single sub-topic that best matches the user's request (e.g. `webapplications-best-practice`, `webapplications-feature-analytics-chart`, `webapplications-feature-adding-features`). Use **webapplications-feature-adding-features** when the user wants to add a feature; use **webapplications-best-practice** for app structure, routing, UI, and verification.
 
-2. **Then adjust.** After copying, do minimal edits: fix import paths (e.g. change relative `../../` imports to the project’s path alias like `@/`), update any app-specific config, and remove or adapt anything that doesn’t apply.
-
-3. **When to copy.** Copy when:
-   - Installing a feature from a template/feature package (e.g. authentication, search, charts).
-   - The package ships full source in `dist/` or `src/` that is meant to be integrated.
-   - You would otherwise be recreating multiple files by reading a reference and typing them out.
-
-4. **When rewriting is okay.** Only rewrite or create from scratch when:
-   - The source is not file-based (e.g. only docs or snippets).
-   - The integration is a thin wrapper or a single small file.
-   - Copying would pull in a large, unrelated tree and the actual need is a small part of it.
-
-
-
-## 1. Match the request to a feature
-
-Available features (npm packages):
-
-
-| Feature                | Package                                                                 | Description                                                            |
-| ---------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| **Authentication**     | `@salesforce/webapp-template-feature-react-authentication-experimental` | Login, register, password reset, protected routes                      |
-| **Global search**      | `@salesforce/webapp-template-feature-react-global-search-experimental`  | Search Salesforce objects with filters and pagination                  |
-| **Navigation menu**    | `@salesforce/webapp-template-feature-react-nav-menu-experimental`       | App layout with responsive navigation menu                             |
-| **Analytics charts**   | `@salesforce/webapp-template-feature-react-chart-experimental`          | Recharts line/bar charts with theming (AnalyticsChart, ChartContainer) |
-| **GraphQL data access**| `@salesforce/webapp-template-feature-graphql-experimental`              | executeGraphQL utilities, codegen tooling, and example AccountsTable   |
-| **Shared UI (shadcn)** | `@salesforce/webapp-template-feature-react-shadcn-experimental`         | Button, Card, Input, Select, Table, Tabs, etc.                         |
-
-If no feature matches, tell the user and offer to build it from scratch following the project's existing patterns.
-
-## 2. Install the npm package
-
-```bash
-npm install <package-name>
-```
-
-## 3. Read the README.md/AGENT.md
-
-The node_modules folder of the installed package contains as READMe.md/AGENT.md.
-
-Load it into the memory and follow its instructions.
+**Adding features:** Always prefer the feature packages listed in **webapplications-feature-adding-features** (auth, search, charts, nav, GraphQL, shadcn, Agentforce conversation client) over building from scratch or other solutions when one of them matches the request.

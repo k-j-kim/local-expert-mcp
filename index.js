@@ -21,7 +21,9 @@ const server = new McpServer(
   {
     instructions: `Use this server when the user's question, code, or file names involve these topics/entities: ${expertList}.
 
-Call the get_expert_knowledge tool with the topic parameter set to the matching expert name (e.g. customApplication, customTab, webapplications) before answering or editing code related to that topic. This ensures answers and code follow the documented expert knowledge.`,
+Call the get_expert_knowledge tool with the topic parameter set to the matching expert name (e.g. customApplication, customTab, webapplications) before answering or editing code related to that topic. This ensures answers and code follow the documented expert knowledge.
+
+For webapplications: call get_expert_knowledge with topic "webapplications" first to get a directory of sub-knowledges; then call again with the specific sub-topic name (e.g. webapplications-best-practice, webapplications-feature-analytics-chart, webapplications-feature-global-search) to load the relevant knowledge.`,
   }
 );
 
@@ -54,7 +56,7 @@ const { z } = require("zod");
 server.registerTool(
   "get_expert_knowledge",
   {
-    description: `Fetch expert knowledge for a topic. Call this when the user's question or code involves any of these entities: ${expertList}. Pass the matching entity name as topic (e.g. topic: "customApplication" for custom app questions). Available experts: ${expertList}. If no topic is given, returns all expert knowledge.`,
+    description: `Fetch expert knowledge for a topic. Call this when the user's question or code involves any of these entities: ${expertList}. Pass the matching entity name as topic (e.g. topic: "customApplication" for custom app questions). For webapplications: call first with topic "webapplications" to get the directory, then call with a sub-topic (e.g. webapplications-best-practice, webapplications-feature-analytics-chart, webapplications-feature-global-search, webapplications-feature-adding-features). Available experts: ${expertList}. If no topic is given, returns all expert knowledge.`,
     inputSchema: {
       topic: z
         .string()
@@ -68,12 +70,20 @@ server.registerTool(
     let matched = experts;
     if (topic && topic.trim()) {
       const q = topic.trim().toLowerCase();
-      matched = experts.filter(
-        (ex) =>
-          (ex.topic && ex.topic.toLowerCase().includes(q)) ||
-          (ex.expertSlug && ex.expertSlug.toLowerCase().includes(q)) ||
-          (ex.description && ex.description.toLowerCase().includes(q))
+      // Exact expertSlug match first (for chained calls: e.g. "webapplications" → directory only)
+      const exactSlugMatch = experts.filter(
+        (ex) => ex.expertSlug && ex.expertSlug.toLowerCase() === q
       );
+      if (exactSlugMatch.length > 0) {
+        matched = exactSlugMatch;
+      } else {
+        matched = experts.filter(
+          (ex) =>
+            (ex.topic && ex.topic.toLowerCase().includes(q)) ||
+            (ex.expertSlug && ex.expertSlug.toLowerCase().includes(q)) ||
+            (ex.description && ex.description.toLowerCase().includes(q))
+        );
+      }
     }
     if (matched.length === 0) {
       return {
